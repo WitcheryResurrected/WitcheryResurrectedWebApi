@@ -14,7 +14,8 @@ public class SuggestionsController : Controller
 {
     private readonly IConfigurationManager _configurationManager;
 
-    public SuggestionsController(IConfigurationManager configurationManager) => _configurationManager = configurationManager;
+    public SuggestionsController(IConfigurationManager configurationManager) =>
+        _configurationManager = configurationManager;
 
     [HttpPost("add")]
     public async Task<ActionResult<int>> AddSuggestion([FromBody] Add add)
@@ -107,9 +108,11 @@ public class SuggestionsController : Controller
     {
         await using var context = new SuggestionsContext();
 
-        return context.Suggestions
-            .Where(suggestion => suggestion.CreatorId == authorId)
-            .Select(suggestion => new UnnamedSuggestionView(suggestion.Id, suggestion)).ToList();
+        return (
+            from suggestion in context.Suggestions
+            where suggestion.CreatorId == authorId
+            select new UnnamedSuggestionView(suggestion.Id, suggestion)
+        ).ToList();
     }
 
     [HttpGet]
@@ -129,12 +132,15 @@ public class SuggestionsController : Controller
         await using var context = new SuggestionsContext();
 
         var suggestions = lastId.HasValue
-            ? context.Suggestions.Where(suggestion => suggestion.Id > lastId)
+            ? from suggestion in context.Suggestions where suggestion.Id > lastId select suggestion
             : context.Suggestions;
 
-        return (from suggestion in suggestions
-            join content in context.SuggestionContent on suggestion.Id equals content.Id
-            select new SuggestionView(suggestion.Id, content.CreatorName, content.Content, suggestion.StateId)).Take(10).ToList();
+        return (
+                from suggestion in suggestions
+                join content in context.SuggestionContent on suggestion.Id equals content.Id
+                select new SuggestionView(suggestion.Id, content.CreatorName, content.Content, suggestion.StateId))
+            .Take(10)
+            .ToList();
     }
 
     [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
