@@ -5,6 +5,7 @@ obj/
 .idea
 *.iml
 Downloads
-config.json
-suggestions.bin
+access_tokens.bin
+suggestions.sqlite
 *.sln.DotSettings.user
+global.json

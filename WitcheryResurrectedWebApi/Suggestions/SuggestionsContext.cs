@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace WitcheryResurrectedSuggestions.Suggestions;
+namespace WitcheryResurrectedWebApi.Suggestions;
 
 public class SuggestionsContext : DbContext
 {

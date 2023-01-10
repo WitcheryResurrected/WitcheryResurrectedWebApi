@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace WitcheryResurrectedSuggestions.Download;
+namespace WitcheryResurrectedWebApi.Download;
 
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]

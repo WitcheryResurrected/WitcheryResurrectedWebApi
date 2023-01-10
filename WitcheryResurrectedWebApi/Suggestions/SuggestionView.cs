@@ -1,4 +1,4 @@
-namespace WitcheryResurrectedSuggestions.Suggestions;
+namespace WitcheryResurrectedWebApi.Suggestions;
 
 public class SuggestionView
 {

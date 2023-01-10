@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace WitcheryResurrectedSuggestions.Download;
+namespace WitcheryResurrectedWebApi.Download;
 
 public interface IDownloadManager : IHostedService
 {

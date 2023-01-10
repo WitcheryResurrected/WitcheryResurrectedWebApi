@@ -5,22 +5,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WitcheryResurrectedSuggestions.Suggestions;
+using WitcheryResurrectedWebApi.Suggestions;
 
-namespace WitcheryResurrectedSuggestions.Controllers;
+namespace WitcheryResurrectedWebApi.Controllers;
 
 [Route("suggestions")]
 public class SuggestionsController : Controller
 {
-    private readonly IConfigurationManager _configurationManager;
+    private readonly IAccessTokenManager _accessTokenManager;
 
-    public SuggestionsController(IConfigurationManager configurationManager) =>
-        _configurationManager = configurationManager;
+    public SuggestionsController(IAccessTokenManager accessTokenManager) =>
+        _accessTokenManager = accessTokenManager;
 
     [HttpPost("add")]
     public async Task<ActionResult<int>> AddSuggestion([FromBody] Add add)
     {
-        if (!await _configurationManager.IsAuthenticated(add.Pass)) return StatusCode(401);
+        if (!await _accessTokenManager.IsAuthenticated(add.Pass)) return StatusCode(401);
 
         await using var context = new SuggestionsContext();
 
@@ -49,7 +49,7 @@ public class SuggestionsController : Controller
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<UnnamedSuggestionView>> DeleteSuggestion([FromRoute] int id, [FromBody] string? pass)
     {
-        if (!await _configurationManager.IsAuthenticated(pass)) return StatusCode(401);
+        if (!await _accessTokenManager.IsAuthenticated(pass)) return StatusCode(401);
 
         await using var context = new SuggestionsContext();
 
@@ -67,7 +67,7 @@ public class SuggestionsController : Controller
     public async Task<ActionResult<UnnamedSuggestionView>> UpdateSuggestion([FromRoute] int id,
         [FromBody] Update update)
     {
-        if (!await _configurationManager.IsAuthenticated(update.Pass)) return StatusCode(401);
+        if (!await _accessTokenManager.IsAuthenticated(update.Pass)) return StatusCode(401);
 
         await using var context = new SuggestionsContext();
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace WitcheryResurrectedSuggestions.Suggestions;
+namespace WitcheryResurrectedWebApi.Suggestions;
 
 public class SuggestionState
 {

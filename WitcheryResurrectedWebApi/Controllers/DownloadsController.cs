@@ -2,22 +2,22 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using WitcheryResurrectedSuggestions.Download;
+using WitcheryResurrectedWebApi.Download;
 
-namespace WitcheryResurrectedSuggestions.Controllers;
+namespace WitcheryResurrectedWebApi.Controllers;
 
 [EnableCors("CorsPolicy")]
 public class DownloadsController : Controller
 {
-    private readonly IConfigurationManager _configurationManager;
+    private readonly IAccessTokenManager _accessTokenManager;
     private readonly IDownloadManager _downloadManager;
 
     public DownloadsController(
-        IConfigurationManager configurationManager,
+        IAccessTokenManager accessTokenManager,
         IDownloadManager downloadManager
     )
     {
-        _configurationManager = configurationManager;
+        _accessTokenManager = accessTokenManager;
         _downloadManager = downloadManager;
     }
 

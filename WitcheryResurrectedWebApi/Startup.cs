@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WitcheryResurrectedSuggestions.Download;
+using WitcheryResurrectedWebApi.Download;
 
-namespace WitcheryResurrectedSuggestions;
+namespace WitcheryResurrectedWebApi;
 
 public class Startup
 {
@@ -14,11 +14,11 @@ public class Startup
 
         services.AddControllersWithViews();
 
-        services.AddSingleton<IConfigurationManager>(
-            _ => new ConfigurationManager("config.json", "access_tokens.bin")
+        services.AddSingleton<IAccessTokenManager>(
+            _ => new AccessTokenManager("access_tokens.bin")
         );
 
-        services.AddHostedService(provider => provider.GetRequiredService<IConfigurationManager>());
+        services.AddHostedService(provider => provider.GetRequiredService<IAccessTokenManager>());
 
         services.AddSingleton<IDownloadManager>(_ => new DownloadManager("Downloads"));
         services.AddHostedService(provider => provider.GetRequiredService<IDownloadManager>());

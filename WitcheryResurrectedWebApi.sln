@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WitcheryResurrectedSuggestions", "WitcheryResurrectedSuggestions\WitcheryResurrectedSuggestions.csproj", "{554691A2-A26F-4F8E-9869-05B42DD59FD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WitcheryResurrectedWebApi", "WitcheryResurrectedWebApi\WitcheryResurrectedWebApi.csproj", "{554691A2-A26F-4F8E-9869-05B42DD59FD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
