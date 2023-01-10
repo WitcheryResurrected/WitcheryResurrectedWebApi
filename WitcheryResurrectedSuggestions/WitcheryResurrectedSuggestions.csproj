@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+        <IsPackable>false</IsPackable>
+        <Nullable>enable</Nullable>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>WitcheryResurrectedSuggestions</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Discord.Net" Version="3.8.1" />
+        <PackageReference Include="Discord.Net.Webhook" Version="3.8.1" />
+        <PackageReference Include="EFCore.NamingConventions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="obj\Debug" />
+    </ItemGroup>
+</Project>
