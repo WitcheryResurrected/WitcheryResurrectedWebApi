@@ -1,0 +1,27 @@
+name: Publish to maven
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-dotnet@v3
+        name: Compile
+        with:
+          dotnet-version: '7.0.x'
+        run: dotnet publish -c Release --output ./build
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy
+        run: rsync -e "ssh -o StrictHostKeyChecking=no" -avz ./build ${{ secrets.SSH_HOME }}/WitcheryResurrectedWebApi
