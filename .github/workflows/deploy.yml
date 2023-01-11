@@ -17,7 +17,7 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Compile
-        run: dotnet publish -c Release --output ./build
+        run: dotnet publish -c Release -o ./build
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
@@ -26,4 +26,4 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
       - name: Deploy
-        run: rsync -e "ssh -o StrictHostKeyChecking=no" -avz ./build ${{ secrets.SSH_HOME }}/WitcheryResurrectedWebApi
+        run: rsync -e "ssh -o StrictHostKeyChecking=no" -az ./build/ ${{ secrets.SSH_HOME }}/WitcheryResurrectedWebApi/
