@@ -47,7 +47,7 @@ public class SuggestionsController : Controller
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult<UnnamedSuggestionView>> DeleteSuggestion([FromRoute] int id, [FromBody] string? pass)
+    public async Task<ActionResult<SuggestionView>> DeleteSuggestion([FromRoute] int id, [FromBody] string? pass)
     {
         if (!await _accessTokenManager.IsAuthenticated(pass)) return StatusCode(401);
 
@@ -60,11 +60,14 @@ public class SuggestionsController : Controller
 
         await context.SaveChangesAsync();
 
-        return new UnnamedSuggestionView(id, suggestion);
+        var content = await context.SuggestionContent.FirstOrDefaultAsync(content => content.Id == suggestion.Id);
+        if (content == null) return StatusCode(404);
+
+        return new SuggestionView(suggestion, content);
     }
 
     [HttpPatch("{id:int}")]
-    public async Task<ActionResult<UnnamedSuggestionView>> UpdateSuggestion([FromRoute] int id,
+    public async Task<ActionResult<SuggestionView>> UpdateSuggestion([FromRoute] int id,
         [FromBody] Update update)
     {
         if (!await _accessTokenManager.IsAuthenticated(update.Pass)) return StatusCode(401);
@@ -79,39 +82,50 @@ public class SuggestionsController : Controller
 
         await context.SaveChangesAsync();
 
-        return new UnnamedSuggestionView(id, suggestion);
+        var content = await context.SuggestionContent.FirstOrDefaultAsync(content => content.Id == suggestion.Id);
+        if (content == null) return StatusCode(404);
+
+        return new SuggestionView(suggestion, content);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<UnnamedSuggestionView>> ById([FromRoute] int id)
+    public async Task<ActionResult<SuggestionView>> ById([FromRoute] int id)
     {
         await using var context = new SuggestionsContext();
         var suggestion = await context.Suggestions.FindAsync(id);
 
         if (suggestion == null) return StatusCode(404);
 
-        return new UnnamedSuggestionView(id, suggestion);
+        var content = await context.SuggestionContent.FirstOrDefaultAsync(content => content.Id == suggestion.Id);
+        if (content == null) return StatusCode(404);
+
+        return new SuggestionView(suggestion, content);
     }
 
     [HttpGet("by_thread/{threadId}")]
-    public async Task<ActionResult<UnnamedSuggestionView>> ByMessage([FromRoute] ulong threadId)
+    public async Task<ActionResult<SuggestionView>> ByMessage([FromRoute] ulong threadId)
     {
         await using var context = new SuggestionsContext();
         var suggestion = await context.Suggestions.FirstOrDefaultAsync(suggestion => suggestion.ThreadId == threadId);
 
         if (suggestion == null) return StatusCode(404);
-        return new UnnamedSuggestionView(suggestion.Id, suggestion);
+
+        var content = await context.SuggestionContent.FirstOrDefaultAsync(content => content.Id == suggestion.Id);
+        if (content == null) return StatusCode(404);
+
+        return new SuggestionView(suggestion, content);
     }
 
     [HttpGet("by_author/{authorId}")]
-    public async Task<IEnumerable<UnnamedSuggestionView>> ByAuthor([FromRoute] ulong authorId)
+    public async Task<IEnumerable<SuggestionView>> ByAuthor([FromRoute] ulong authorId)
     {
         await using var context = new SuggestionsContext();
 
         return (
             from suggestion in context.Suggestions
+            join content in context.SuggestionContent on suggestion.Id equals content.Id
             where suggestion.CreatorId == authorId
-            select new UnnamedSuggestionView(suggestion.Id, suggestion)
+            select new SuggestionView(suggestion, content)
         ).ToList();
     }
 
@@ -136,11 +150,10 @@ public class SuggestionsController : Controller
             : context.Suggestions;
 
         return (
-                from suggestion in suggestions
-                join content in context.SuggestionContent on suggestion.Id equals content.Id
-                select new SuggestionView(suggestion.Id, content.CreatorName, content.Content, suggestion.StateId))
-            .Take(10)
-            .ToList();
+            from suggestion in suggestions
+            join content in context.SuggestionContent on suggestion.Id equals content.Id
+            select new SuggestionView(suggestion, content)
+        ).Take(10).ToList();
     }
 
     [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
