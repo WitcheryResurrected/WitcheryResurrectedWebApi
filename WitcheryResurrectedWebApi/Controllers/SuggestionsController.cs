@@ -43,6 +43,8 @@ public class SuggestionsController : Controller
             CreatorName = add.CreatorName
         });
 
+        await context.SaveChangesAsync();
+
         return suggestion.Id;
     }
 
